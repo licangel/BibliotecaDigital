@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block title %}Repositorio - Biblioteca Digital{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1><i class="fas fa-book"></i> Repositorio de Libros</h1>
+                <a href="{{ url_for('upload') }}" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Subir Nuevo Libro
+                </a>
+            </div>
+
+            {% if books %}
+            <div class="row">
+                {% for book in books %}
+                <div class="col-md-4 col-lg-3 mb-4">
+                    <div class="card book-card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ book.title }}</h5>
+                            <p class="card-text">
+                                <small class="text-muted">
+                                    <i class="fas fa-user"></i> 
+                                    {{ book.author_name or 'Autor desconocido' }}
+                                </small>
+                            </p>
+                            {% if book.publisher_name %}
+                            <p class="card-text">
+                                <small class="text-muted">
+                                    <i class="fas fa-building"></i> 
+                                    {{ book.publisher_name }}
+                                </small>
+                            </p>
+                            {% endif %}
+                            {% if book.publication_year %}
+                            <p class="card-text">
+                                <small class="text-muted">
+                                    <i class="fas fa-calendar"></i> 
+                                    {{ book.publication_year }}
+                                </small>
+                            </p>
+                            {% endif %}
+                            {% if book.description %}
+                            <p class="card-text">
+                                {{ book.description[:100] }}
+                                {% if book.description|length > 100 %}...{% endif %}
+                            </p>
+                            {% endif %}
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">
+                                    <i class="fas fa-download"></i> 
+                                    {{ book.download_count or 0 }} descargas
+                                </small>
+                                <small class="text-muted">
+                                    <i class="fas fa-user-plus"></i> 
+                                    {{ book.uploaded_by_username }}
+                                </small>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="btn-group" role="group">
+                                    <a href="{{ url_for('read_book', book_id=book.id) }}" 
+                                       class="btn btn-outline-primary btn-sm" target="_blank">
+                                        <i class="fas fa-eye"></i> Leer
+                                    </a>
+                                    <a href="{{ url_for('download_book', book_id=book.id) }}" 
+                                       class="btn btn-primary btn-sm">
+                                        <i class="fas fa-download"></i> Descargar
+                                    </a>
+                                </div>
+                                <small class="text-muted">
+                                    ISBN: {{ book.isbn }}
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="text-center py-5">
+                <i class="fas fa-book fa-4x text-muted mb-3"></i>
+                <h3 class="text-muted">No hay libros disponibles</h3>
+                <p class="text-muted">Sé el primero en subir un libro al repositorio</p>
+                <a href="{{ url_for('upload') }}" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Subir Primer Libro
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% block scripts %}
+<script>
+// Función para mostrar modal con información completa del libro
+function showBookDetails(bookId) {
+    // Aquí puedes implementar un modal con más detalles del libro
+    console.log('Mostrando detalles del libro:', bookId);
+}
+
+// Función para confirmar descarga
+function confirmDownload(bookId, bookTitle) {
+    if (confirm(`¿Deseas descargar "${bookTitle}"?`)) {
+        window.location.href = `/download/${bookId}`;
+    }
+}
+</script>
+{% endblock %}
+{% endblock %}

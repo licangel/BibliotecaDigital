@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Subir Libro{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">Subir un nuevo libro</h2>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST" enctype="multipart/form-data">
+        <div class="form-group">
+          <label for="file">Selecciona un archivo PDF:</label>
+          <input type="file" class="form-control-file" name="file" id="file" accept="application/pdf" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Subir libro</button>
+    </form>
+</div>
+{% endblock %}
